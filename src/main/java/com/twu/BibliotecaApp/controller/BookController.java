@@ -1,45 +1,57 @@
 package com.twu.BibliotecaApp.controller;
 
+import com.twu.BibliotecaApp.Data.BookList;
+import com.twu.BibliotecaApp.Entity.Book;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class BookController {
 
     @GetMapping(value = "/books")
     ResponseEntity getBooks() {
-        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
-        File file = new File("src/main/java/com/twu/BibliotecaApp/Data/Book.json");
-        InputStream inputStream;
-        try {
-            inputStream = new FileInputStream(file);
-            byte[] data = new byte[2048];
-            inputStream.read(data);
-            JSONArray jsonArray = new JSONArray(new String(data));
-            jsonArray.forEach((item) -> {
-                HashMap<String, Object> itemMap = new HashMap<>();
-                JSONObject jsonObject = new JSONObject(item.toString());
-                itemMap.put("id", jsonObject.getInt("id"));
-                itemMap.put("url", jsonObject.getString("url"));
-                itemMap.put("name", jsonObject.getString("name"));
-                itemMap.put("state", jsonObject.getBoolean("state"));
-                itemMap.put("count", jsonObject.getInt("count"));
-                itemMap.put("publishDate", jsonObject.getString("publishDate"));
-                itemMap.put("author", jsonObject.getString("author"));
-                itemMap.put("location", jsonObject.getString("location"));
-                result.add(itemMap);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<Book> bookList = new BookList().getBookList();
+        return new ResponseEntity<>(bookList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "books/{id}")
+    ResponseEntity checkoutBook(@PathVariable("id") int id) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<Book> bookList = new BookList().getBookList();
+        new BookList().setBookList(bookList.stream().peek(book -> {
+            if (book.getId() == id) {
+                book.setCount(book.getCount() - 1);
+                result.put("message", "success");
+            }
+        }).collect(Collectors.toList()));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/books")
+    ResponseEntity returnBook(@RequestBody HashMap<String, String> input) {
+        HashMap<String, String> result = new HashMap<>();
+        String name = input.get("name");
+        String id = input.get("id");
+        List<Book> bookList = new BookList().getBookList();
+        new BookList().setBookList(bookList.stream().peek(book -> {
+            if (name.equals(book.getName()) && book.getId() == Integer.valueOf(id)) {
+                book.setCount(book.getCount() + 1);
+                result.put("message", "success");
+            }
+        }).collect(Collectors.toList()));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
