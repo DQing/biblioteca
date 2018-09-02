@@ -13,12 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/api")
-public class UserController {
+public class MessageController {
 
     private static String MESSAGE = "Welcome To Biblioteca Library";
 
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/message")
     ResponseEntity getMessage() {
         Map<String, String> result = new HashMap<>();
         result.put("message", MESSAGE);

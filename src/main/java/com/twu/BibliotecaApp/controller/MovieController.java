@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/api")
-public class BookController {
+public class MovieController {
 
     private static String MESSAGE = "Welcome To Biblioteca Library";
 
