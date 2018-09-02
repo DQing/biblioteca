@@ -2,8 +2,6 @@ package com.twu.BibliotecaApp.controller;
 
 import com.twu.BibliotecaApp.Data.BookList;
 import com.twu.BibliotecaApp.Entity.Book;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;

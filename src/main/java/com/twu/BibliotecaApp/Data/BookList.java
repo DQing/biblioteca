@@ -2,9 +2,7 @@ package com.twu.BibliotecaApp.Data;
 
 import com.twu.BibliotecaApp.Entity.Book;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class BookList {
