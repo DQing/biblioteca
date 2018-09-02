@@ -1,2 +1,6 @@
-# Spring-init
-使用start.io直接生成的项目,可在命令行运行成功
+# biblioteca
+- 后端启动 在8080端口
+### API
+``
+get  getMessage  http://localhost:8080/api/home
+``
