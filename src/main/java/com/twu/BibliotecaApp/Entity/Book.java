@@ -1,20 +1,23 @@
 package com.twu.BibliotecaApp.Entity;
 
-import java.util.Date;
+
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 public class Book {
     private int id;
     private String name;
     private String author;
     private int count;
-    private String publishDate;
+    private LocalDate publishDate;
     private String location;
     private Boolean state;
 
     public Book() {
     }
 
-    public Book(int id, String name, String author, int count, String publishDate, String location, Boolean state) {
+    public Book(int id, String name, String author, int count, LocalDate publishDate, String location, Boolean state) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -56,11 +59,11 @@ public class Book {
         this.count = count;
     }
 
-    public String getPublishDate() {
+    public LocalDate getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(String publishDate) {
+    public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
 

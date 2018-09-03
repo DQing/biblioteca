@@ -1,18 +1,22 @@
 package com.twu.BibliotecaApp.Entity;
 
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+
 public class Movie {
     private int id;
     private String name;
     private String director;
     private int count;
-    private String publishDate;
+    private LocalDate publishDate;
     private String location;
     private Boolean state;
 
     public Movie() {
     }
 
-    public Movie(int id, String name, String director, int count, String publishDate, String location, Boolean state) {
+    public Movie(int id, String name, String director, int count, LocalDate publishDate, String location, Boolean state) {
         this.id = id;
         this.name = name;
         this.director = director;
@@ -54,11 +58,11 @@ public class Movie {
         this.count = count;
     }
 
-    public String getPublishDate() {
+    public LocalDate getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(String publishDate) {
+    public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
 
