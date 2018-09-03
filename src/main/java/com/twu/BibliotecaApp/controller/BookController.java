@@ -40,16 +40,20 @@ public class BookController {
         }
     }
 
-    @GetMapping(value = "books/{id}")
-    ResponseEntity checkoutBook(@PathVariable("id") int id) {
+    @GetMapping(value = "/books/checkout")
+    ResponseEntity checkoutBook(@RequestBody HashMap<String, String> bookInfo) {
         if (login.isLogin()) {
+            int id = Integer.valueOf(bookInfo.get("id"));
+            String name = bookInfo.get("name");
             HashMap<String, Object> result = new HashMap<>();
             List<Book> books = bookList.getBookList();
             bookList.setBookList(books.stream().map(book -> {
-                if (book.getId() == id) {
+                if (book.getId() == id && name.equals(book.getName())) {
                     book.setCount(book.getCount() - 1);
                     addCheckoutBook(id);
                     result.put("message", "success");
+                } else {
+                    result.put("message", "checkout fail! please checkout again");
                 }
                 return book;
             }).collect(Collectors.toList()));
@@ -58,6 +62,12 @@ public class BookController {
             return new ResponseEntity<>("please login !", HttpStatus.FORBIDDEN);
 
         }
+    }
+
+    @GetMapping(value = "/books/{id}")
+    ResponseEntity getBookInfo(@PathVariable int id) {
+        List<Book> books = bookList.getBookList().stream().filter(book -> book.getId() == id).collect(Collectors.toList());
+        return new ResponseEntity<>(books.get(0), HttpStatus.OK);
     }
 
     private void addCheckoutBook(int id) {
@@ -87,6 +97,8 @@ public class BookController {
                     book.setCount(book.getCount() + 1);
                     updateUserBooks(book.getId());
                     result.put("message", "success");
+                } else {
+                    result.put("message", "return book fail, please return again");
                 }
                 return book;
             }).collect(Collectors.toList()));

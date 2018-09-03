@@ -43,6 +43,8 @@ public class MovieController {
                     movie.setCount(movie.getCount() - 1);
                     addCheckoutMovie(id);
                     result.put("message", "success");
+                } else {
+                    result.put("message", "checkout movie fail, please return again");
                 }
                 return movie;
             }).collect(Collectors.toList()));
@@ -80,6 +82,8 @@ public class MovieController {
                     movie.setCount(movie.getCount() + 1);
                     updateUserMovies(Integer.valueOf(id));
                     result.put("message", "success");
+                } else {
+                    result.put("message", "return movie fail, please return again");
                 }
                 return movie;
             }).collect(Collectors.toList()));
