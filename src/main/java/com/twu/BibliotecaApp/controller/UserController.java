@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Controller
+@RestController
 public class UserController {
 
     private static String MESSAGE = "Welcome To Biblioteca Library";
@@ -29,22 +26,25 @@ public class UserController {
     private Login login;
 
     @PostMapping(value = "/login")
-    ResponseEntity login(@RequestBody HashMap<String, String> user) {
+    public ResponseEntity login(@RequestBody HashMap<String, String> user) {
         String number = user.get("libraryNumber");
         String password = user.get("password");
+        HashMap<String, String> result = new HashMap<>();
         List<User> currentUser = userList.getUserList().stream()
                 .filter(item -> item.getLibraryNumber().equals(number) && item.getPassword().equals(password))
                 .collect(Collectors.toList());
         if (currentUser.size() != 0) {
             userList.setCurrentUser(currentUser.get(0));
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            result.put("message", "success");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("no such user", HttpStatus.NOT_FOUND);
+            result.put("message", "no such user");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping(value = "/users")
-    ResponseEntity getUserInfo(@PathVariable int id) {
+    ResponseEntity getUserInfo() {
         if (login.isLogin()) {
             User currentUser = userList.getCurrentUser();
             return new ResponseEntity<>(currentUser, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/message")
-    ResponseEntity getMessage() {
+    public ResponseEntity<?> getMessage() {
         Map<String, String> result = new HashMap<>();
         result.put("message", MESSAGE);
         return new ResponseEntity<>(result, HttpStatus.OK);
